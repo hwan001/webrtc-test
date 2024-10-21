@@ -1,4 +1,4 @@
-const signalingServerUrl = "ws://localhost:8080/signal";
+const signalingServerUrl = "wss://h001.666lab.org/signal";
 const configuration = {
   iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
 };
@@ -24,10 +24,16 @@ signalingSocket.onmessage = async (message) => {
   }
 };
 
-// Handle incoming video stream
+
 peerConnection.ontrack = (event) => {
+  console.log('Received remote track:', event);
   const videoElement = document.getElementById("remoteVideo");
   videoElement.srcObject = event.streams[0];
+  console.log('Video stream set to video element');
+};
+
+peerConnection.oniceconnectionstatechange = () => {
+  console.log('ICE connection state changed:', peerConnection.iceConnectionState);
 };
 
 // Create an offer
